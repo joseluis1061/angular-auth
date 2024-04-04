@@ -1,14 +1,15 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AuthService } from '@services/auth.service';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { faPen, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { RequestStatus } from '@models/request-status.model';
+import { ActivatedRoute } from '@angular/router';
 @Component({
   selector: 'app-login-form',
   templateUrl: './login-form.component.html'
 })
-export class LoginFormComponent {
+export class LoginFormComponent{
 
   form = this.formBuilder.nonNullable.group({
     email: ['', [Validators.email, Validators.required]],
@@ -23,8 +24,16 @@ export class LoginFormComponent {
   constructor(
     private formBuilder: FormBuilder,
     private router: Router, 
-    private authService: AuthService
-  ) { }
+    private authService: AuthService,
+    private activatedRoute: ActivatedRoute
+  ) {
+    const data: any = this.activatedRoute.snapshot.queryParams['email'] || null;
+    if(data){
+      this.form.controls.email.setValue(data);
+    }
+   }
+
+
 
   doLogin() {
     if (this.form.valid) {

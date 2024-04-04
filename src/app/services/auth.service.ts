@@ -18,11 +18,17 @@ export class AuthService {
     })
   }
 
-  auth(email: string, password: string, name: string){
+  register(name: string, email: string, password: string){
     return this.http.post(`${this.url_api}/auth/register`, {
+      name: name,
       email: email,
-      password: password,
-      name: name
+      password: password
+    })
+  }
+
+  isAvailable(email: string){
+    return this.http.post<{isAvailable: boolean}>(`${this.url_api}/auth/is-available`, {
+      email: email,
     })
   }
 }
