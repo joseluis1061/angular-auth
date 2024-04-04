@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '@environments/environment';
-import { Observable } from 'rxjs';
+import { Observable, switchMap } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
@@ -25,10 +25,33 @@ export class AuthService {
       password: password
     })
   }
+  registerAndLogin(name: string, email: string, password: string){
+    return this.http.post(`${this.url_api}/auth/register`, {
+      name: name,
+      email: email,
+      password: password
+    }).pipe(
+      switchMap( () => 
+        this.login(email, password)
+      )
+    )
+  }
 
   isAvailable(email: string){
     return this.http.post<{isAvailable: boolean}>(`${this.url_api}/auth/is-available`, {
       email: email,
+    })
+  }
+
+  recovery(email: string){
+    return this.http.post<{ link: string, recoveryToken: string }>(`${this.url_api}/auth/recovery`, {
+      email: email,
+    })
+  }
+  changePassword(token: string, newPassword: string,){
+    return this.http.post<{ link: string, recoveryToken: string }>(`${this.url_api}/auth/change-password`, {
+      token: token,
+      newPassword: newPassword
     })
   }
 }
