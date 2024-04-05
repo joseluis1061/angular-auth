@@ -1,21 +1,26 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '@environments/environment';
-import { Observable, switchMap } from 'rxjs';
+import { Observable, switchMap, tap } from 'rxjs';
+import { TokenService } from './token.service';
+import { AuthResponse } from '@models/auth.model';
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   private url_api = environment.url_api;
   constructor(
-    private http: HttpClient
+    private http: HttpClient,
+    private tokenService: TokenService
   ) { }
 
-  login(email: string, password: string){
-    return this.http.post(`${this.url_api}/auth/login`, {
+  login(email: string, password: string):Observable<AuthResponse>{
+    return this.http.post<AuthResponse>(`${this.url_api}/auth/login`, {
       email: email,
       password: password
-    })
+    }).pipe(
+      tap(response => this.tokenService.setToken(response.access_token))
+    )
   }
 
   register(name: string, email: string, password: string){
@@ -31,7 +36,7 @@ export class AuthService {
       email: email,
       password: password
     }).pipe(
-      switchMap( () => 
+      switchMap( () =>
         this.login(email, password)
       )
     )
