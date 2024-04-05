@@ -1,24 +1,26 @@
 import { Injectable } from '@angular/core';
+import { getCookie, setCookie, removeCookie } from 'typescript-cookie';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TokenService {
 
-  constructor() { }
+  constructor(
+    private router: Router
+  ) { }
 
   setToken(token: string){
     localStorage.setItem('token', JSON.stringify(token));
+    setCookie('token-trello', token, {expires: 365, path:'/'})
   }
 
-  getToken(): string | null{
-    if(localStorage.getItem('token')){
-      return JSON.stringify (localStorage.getItem('token'))
-    }
-    return null
+  getToken(): string | undefined{
+    return getCookie('token-trello');
   }
 
   removeToken(){
-    localStorage.removeItem('token');
+    removeCookie('token-trello');
   }
 }
