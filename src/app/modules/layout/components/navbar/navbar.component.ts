@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
 import { AuthService } from '@services/auth.service';
+import { UsersService } from '@services/users.service';
 import { Router } from '@angular/router';
+import { Users } from '@models/users.model';
+
 import {
   faBell,
   faInfoCircle,
@@ -21,9 +24,13 @@ export class NavbarComponent {
   isOpenOverlayAvatar = false;
   isOpenOverlayBoards = false;
 
+  user$= this.usersService.user$;
+
+
   constructor(
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private usersService: UsersService
   ) {}
 
   logOut(){

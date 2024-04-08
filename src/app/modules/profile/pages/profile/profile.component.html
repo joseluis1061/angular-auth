@@ -1,3 +1,11 @@
 <div class="container mx-auto">
-  <h1>Profile</h1>
+  <h1 class="font-bold">Profile</h1>
+  <div *ngIf="profile">
+    <img class="w-80" [src]="profile.avatar" alt="profile avatars">
+    <p>name: {{profile.name}}</p>
+    <p>email: {{profile.email}}</p>
+    <p>avatar: {{profile.avatar}}</p>
+    <p>creationAt: {{profile.creationAt}}</p>
+    <p>updatedAt: {{profile.updatedAt}}</p>
+  </div>
 </div>
