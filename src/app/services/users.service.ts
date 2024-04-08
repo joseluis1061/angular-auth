@@ -4,6 +4,7 @@ import { TokenService } from './token.service';
 import { environment } from '@environments/environment';
 import { Users } from '@models/users.model';
 import { BehaviorSubject, tap } from 'rxjs';
+import { checkToken } from '@interceptors/token.interceptor';
 @Injectable({
   providedIn: 'root'
 })
@@ -27,19 +28,19 @@ export class UsersService {
 
   getUsers(){
     return this.http.get<Users[]>(`${this.url_api}/users`, {
-      headers: this.headers
+      context: checkToken()
     });
   }
 
   getProfile(){
     return this.http.get<Users>(`${this.url_api}/auth/profile`, {
-      headers: this.headers
+      context: checkToken()
     }).pipe(
       tap((user) => this.user$.next(user))
     );
   }
 
-  // getUser(){
-  //   this.user$.
-  // }
+  getDataUser(){
+    return this.user$.getValue();
+  }
 }

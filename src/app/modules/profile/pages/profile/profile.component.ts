@@ -18,10 +18,8 @@ export class ProfileComponent implements OnInit{
       next: (response) => this.profile = response
     })
 
-    this.usersService.user$.subscribe({
-      next: (profile) => {
-        this.profile = profile
-      }
+    this.usersService.user$.subscribe((profile) => {
+      this.profile = profile
     })
   }
 }
