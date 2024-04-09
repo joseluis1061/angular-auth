@@ -19,7 +19,19 @@ export class AuthService {
       email: email,
       password: password
     }).pipe(
-      tap(response => this.tokenService.setToken(response.access_token))
+      tap(response => {
+        this.tokenService.setToken(response.access_token),
+        this.tokenService.setRefreshToken(response.refresh_token)
+      })
+    )
+  }
+
+  refreshToken(refreshToken: string):Observable<AuthResponse>{
+    return this.http.post<AuthResponse>(`${this.url_api}/auth/refresh-token`, {refreshToken}).pipe(
+      tap(response => {
+        this.tokenService.setToken(response.access_token),
+        this.tokenService.setRefreshToken(response.refresh_token)
+      })
     )
   }
 

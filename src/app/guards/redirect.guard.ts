@@ -15,7 +15,7 @@ export class RedirectGuard implements CanActivate {
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    if(this.tokenService.getToken()){
+    if(this.tokenService.isValidRefreshToken()){
       this.router.navigate(['/app/boards']);
       return false;
     }
